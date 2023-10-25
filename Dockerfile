@@ -1,4 +1,4 @@
-FROM 221581667315.dkr.ecr.eu-west-1.amazonaws.com/alpine:k8s-1.26.1
+FROM 974360507615.dkr.ecr.eu-west-1.amazonaws.com/alpine/k8s:1.26.9
     
 COPY deploy.sh /usr/local/bin/deploy
 
