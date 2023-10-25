@@ -92,7 +92,7 @@ inputs:
 
 runs:
     using: 'docker'
-    image: 'Dockerfile'
+    image: public.ecr.aws/deel-shared/github-actions-deploy-eks-helm:1.0
     env:
         AWS_REGION: ${{ inputs.aws-region }}
         AWS_SECRET_ACCESS_KEY: ${{ inputs.aws-secret-access-key }}
