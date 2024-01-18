@@ -10,13 +10,13 @@ OCI_REGISTRY=false
 # Check repository type
 
 if [ -n "${HELM_REPOSITORY}" ]; then
-    if [[ ${HELM_REPOSITORY} =~ ^http.* ]]; then
+    if [[ ${HELM_REPOSITORY} =~ ^http.* ]] || [[ ${HELM_REPOSITORY} =~ ^s3.* ]]; then
         OCI_REGISTRY=false
     else
         if [[ ${HELM_REPOSITORY} =~ ^oci.* ]]; then
             OCI_REGISTRY=true
         else
-            echo "::error::Protocol handler expected here. Need http or oci."
+            echo "::error::Protocol handler expected here. Need http, s3 or oci."
             exit 1
         fi
     fi
@@ -124,8 +124,13 @@ fi
 # Proceed with installation procedure
 
 if [ "${HELM_ACTION}" == "install" ]; then
-    # Upgrade or install the chart.  This does it all.
-    HELM_COMMAND="helm upgrade --install --create-namespace --timeout ${TIMEOUT}  ${HELM_AUTH}"
+
+    if [ -n "${USE_SECRETS_VALS}" ]; then
+      HELM_COMMAND="helm secrets --backend vals --evaluate-templates true upgrade --install --create-namespace --timeout ${TIMEOUT}  ${HELM_AUTH}"
+    else
+      # Upgrade or install the chart.  This does it all.
+      HELM_COMMAND="helm upgrade --install --create-namespace --timeout ${TIMEOUT}  ${HELM_AUTH}"
+    fi
 
     # If we should wait, then do so
     if [ -n "${HELM_WAIT}" ]; then
@@ -194,5 +199,5 @@ if [ "${HELM_ACTION}" == "install" ]; then
     HELM_COMMAND="${HELM_COMMAND} ${DEPLOY_CHART_PATH}"
 fi
 
-echo "Executing: ${HELM_COMMAND}"
-${HELM_COMMAND}
+echo "Executing: ${HELM_COMMAND} ${HELM_EXTRA_ARGS}"
+${HELM_COMMAND} ${HELM_EXTRA_ARGS}
