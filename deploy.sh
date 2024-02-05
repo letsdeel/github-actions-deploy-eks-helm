@@ -157,7 +157,11 @@ if [ "${HELM_ACTION}" == "install" ]; then
     if [ "${DRY_RUN}" == "true" ]; then
         HELM_COMMAND="${HELM_COMMAND} --dry-run"
     fi
-
+    
+    if [ "$DEBUG" == "true" ]; then
+        HELM_COMMAND="${HELM_COMMAND} --debug "
+    fi
+    
 elif [ "${HELM_ACTION}" == "uninstall" ]; then
     HELM_COMMAND="helm uninstall --timeout ${TIMEOUT}"
     
