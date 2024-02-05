@@ -89,7 +89,10 @@ inputs:
     username:
         description: 'Chart repository username where to locate the requested chart.'
         required: false
-
+    debug:
+        description: 'Helm debug boolean'
+        required: false
+        default: false
 runs:
     using: 'docker'
     image: docker://public.ecr.aws/deel-shared/github-actions-deploy-eks-helm:1.2.4
@@ -120,3 +123,4 @@ runs:
         REPO_USERNAME: ${{ inputs.username }}
         REPO_PASSWORD: ${{ inputs.password }}
         VERSION: ${{ inputs.version }}
+        DEBUG: ${{ inputs.debug }}
